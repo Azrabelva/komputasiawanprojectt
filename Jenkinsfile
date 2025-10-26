@@ -1,34 +1,45 @@
 pipeline {
   agent any
+
   environment {
-    IMAGE_NAME = 'Belva/komputasi-awan-project'
-    REGISTRY   = 'https://index.docker.io/v1/'
+    // Ganti dengan nama Docker Hub kamu
+    IMAGE_NAME = 'belvaaaaa/komputasiawanprojectt'
+    REGISTRY = 'https://index.docker.io/v1/'
     REGISTRY_CREDENTIALS = 'dockerhub-credentials'
   }
+
   stages {
     stage('Checkout') {
-      steps { checkout scm }
+      steps {
+        checkout scm
+      }
     }
+
     stage('Build Docker Image') {
       steps {
         script {
-          echo '🚧 Build Docker image'
-          docker.build("${IMAGE_NAME}:${env.BUILD_NUMBER}")
+          echo '🚧 Build Docker image...'
+          dockerImage = docker.build("${IMAGE_NAME}:${env.BUILD_NUMBER}")
         }
       }
     }
+
     stage('Push Docker Image') {
       steps {
         script {
-          echo '📤 Push to Docker Hub'
+          echo '📤 Push image ke Docker Hub...'
           docker.withRegistry(REGISTRY, REGISTRY_CREDENTIALS) {
-            def tag = "${IMAGE_NAME}:${env.BUILD_NUMBER}"
-            docker.image(tag).push()
-            docker.image(tag).push('latest')
+            dockerImage.push("${env.BUILD_NUMBER}")
+            dockerImage.push('latest')
           }
         }
       }
     }
   }
-  post { always { echo "✅ Selesai – tag ${env.BUILD_NUMBER}" } }
+
+  post {
+    always {
+      echo "✅ Pipeline selesai – image: ${IMAGE_NAME}:${env.BUILD_NUMBER}"
+    }
+  }
 }
