@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     // Ganti dengan nama Docker Hub kamu
-    IMAGE_NAME = 'belvaaaaa/komputasiawanprojectt'
+    IMAGE_NAME = 'belvaaaaa/komputasiawanproject'
     REGISTRY = 'https://index.docker.io/v1/'
     REGISTRY_CREDENTIALS = 'dockerhub-credentials'
   }
